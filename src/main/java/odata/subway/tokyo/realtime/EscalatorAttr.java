@@ -11,7 +11,7 @@ public class EscalatorAttr {
 		State_DeviceUpState = d;
 	}
 	public String toString() {
-		return Double.toString(State_RollerFriction) + Double.toString(State_Temperature) + Integer.toString(State_DeviceUpState);
+		return Double.toString(State_RollerFriction) +"+"+ Double.toString(State_Temperature) +"+"+ Integer.toString(State_DeviceUpState);
 	}
 
 }

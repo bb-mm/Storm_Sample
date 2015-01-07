@@ -18,9 +18,9 @@ public class CMAttr {
 	}
 	
 	public String toString() {
-		return Double.toString(State_HingeFriction) + Double.toString(State_Temperature)
-				+ Integer.toString(State_TicketErrors) + Integer.toString(State_TicketsAccepted)
-				+ Integer.toString(State_TicketsRefused) + Integer.toString(State_DeviceUpState);
+		return Double.toString(State_HingeFriction) +"+"+ Double.toString(State_Temperature)
+				+"+"+ Integer.toString(State_TicketErrors) +"+"+ Integer.toString(State_TicketsAccepted)
+				+"+"+ Integer.toString(State_TicketsRefused) +"+"+ Integer.toString(State_DeviceUpState);
 	}
 
 }

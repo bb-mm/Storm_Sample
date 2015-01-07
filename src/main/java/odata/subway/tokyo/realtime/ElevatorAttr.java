@@ -11,6 +11,6 @@ public class ElevatorAttr {
 		State_DeviceUpState = d;
 	}
 	public String toString() {
-		return Double.toString(State_MotorVibration) + Double.toString(State_Temperature) + Integer.toString(State_DeviceUpState);
+		return Double.toString(State_MotorVibration) +"+"+ Double.toString(State_Temperature) +"+"+ Integer.toString(State_DeviceUpState);
 	}
 }

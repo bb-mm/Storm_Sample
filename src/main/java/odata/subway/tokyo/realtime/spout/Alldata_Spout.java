@@ -21,8 +21,7 @@ public class Alldata_Spout {
 		double t = (double)date.getHours() + ((double)date.getMinutes()-1)/60;
 		return t;
 	}
-	public static String getAttr() throws ClientProtocolException, IOException, JSONException {
-		String res="";
+	public static void getAttr() throws ClientProtocolException, IOException, JSONException {
 		String url = "http://mingding.chinacloudapp.cn/TokyoSubway/OdataServlet.cn/Ts_escalatorhistorys?"
 				+ "$format=json&$filter=TS_HTIsSingleDevice eq 'yes' and TS_HTLineNum eq 4 and TS_HTLineOfStationNum eq 16 and TS_HTFrame eq ";
 		url = url.replaceAll(" ","%20");
@@ -45,7 +44,7 @@ public class Alldata_Spout {
 	    	  System.out.println(frame+" State_Temperature: " + jb.getString("State_Temperature"));
 	    	  System.out.println(frame+" TS_EscalatorDeviceName: " + jb.getString("TS_EscalatorDeviceName"));
 	      }
-		return res;
+		return;
 	}
 	public static void main(String args[]) throws JSONException, IOException, InterruptedException {
 		getAttr();

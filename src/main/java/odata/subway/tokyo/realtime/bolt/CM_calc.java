@@ -10,16 +10,26 @@ import backtype.storm.tuple.Tuple;
 
 public class CM_calc  extends BaseRichBolt{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3266123308627680688L;
+	private OutputCollector collector;
+//	private double avg_HingeFriction=0;            
+//	private double avg_Temperature=0;               
+//	private int sum_TicketErrors=0;                 
+//	private int sum_TicketsAccepted=0;             
+//	private int sum_TicketsRefused=0;      
 	@Override
-	public void execute(Tuple arg0) {
+	public void execute(Tuple tuple) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void prepare(Map arg0, TopologyContext arg1, OutputCollector arg2) {
+	public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
 		// TODO Auto-generated method stub
-		
+		this.collector = collector;
 	}
 
 	@Override

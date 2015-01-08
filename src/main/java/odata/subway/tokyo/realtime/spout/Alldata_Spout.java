@@ -267,9 +267,9 @@ public class Alldata_Spout extends BaseRichSpout{
 	public void nextTuple() {
 		// TODO Auto-generated method stub
 		String frame = Double.toString(getDate());
-		String escalator="",elevator="",cm="",tm="";
 		for(String line:subway.keySet()) {
 			for(String num:subway.get(line)) {
+				String escalator="",elevator="",cm="",tm="";
 				try {
 					escalator = getEscalatorAttr(line,num,frame);
 					elevator = getElevatorAttr(line,num,frame);
@@ -292,8 +292,8 @@ public class Alldata_Spout extends BaseRichSpout{
 					tm = "|||";
 					}
 				}
+				collector.emit(new Values(line,num,escalator,elevator,tm,cm));
 			}
-			collector.emit(new Values(line,escalator,elevator,tm,cm));
 		}
 		try {
 			Thread.sleep(60000);
@@ -325,7 +325,7 @@ public class Alldata_Spout extends BaseRichSpout{
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		// TODO Auto-generated method stub
-		declarer.declare(new Fields("Line","Escalator","Elevator","TicketMachine","CheckMachine"));
+		declarer.declare(new Fields("Line","Num","Escalator","Elevator","TicketMachine","CheckMachine"));
 	}
 	public static void main(String args[]) throws JSONException, IOException, InterruptedException {
 		Alldata_Spout test = new Alldata_Spout();

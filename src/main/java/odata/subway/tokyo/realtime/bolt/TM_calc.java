@@ -14,17 +14,20 @@ public class TM_calc  extends BaseRichBolt{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private OutputCollector collector;
+//	private double avg_RemainingInk = 0;             
+//	private int sum_RemainingTickets = 0;            
+//	private double avg_Temperature = 0;              
 	@Override
-	public void execute(Tuple arg0) {
+	public void execute(Tuple tuple) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void prepare(Map arg0, TopologyContext arg1, OutputCollector arg2) {
+	public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
 		// TODO Auto-generated method stub
-		
+		this.collector = collector;
 	}
 
 	@Override

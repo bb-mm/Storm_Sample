@@ -21,7 +21,7 @@ public class Escalator_report  extends BaseRichBolt{
 	private static final Logger LOGGER = LoggerFactory.getLogger(Escalator_report.class);
 	private final long logIntervalInSeconds = 50;
 	private Stopwatch stopwatch = null;
-	private HashMap<String,SumBlock> mapper;
+	//private HashMap<String,SumBlock> mapper;
 	private static final long serialVersionUID = -2454428952684921175L;
 	private OutputCollector collector;
 	@Override

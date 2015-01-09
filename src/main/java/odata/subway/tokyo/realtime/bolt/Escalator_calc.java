@@ -66,9 +66,9 @@ public class Escalator_calc  extends BaseRichBolt{
 		count=escalator.length;
 		for(int i=0;i<count;i++) {
 			//String[] escalator_attr = escalator[i].split("+");
-			EscalatorAttr ea = new EscalatorAttr(escalator[i]);
-			sum_temperature += ea.State_Temperature;
-			sum_friction += ea.State_RollerFriction;
+//			EscalatorAttr ea = new EscalatorAttr(escalator[i]);
+//			sum_temperature += ea.State_Temperature;
+//			sum_friction += ea.State_RollerFriction;
 		}
 		String Sum = String.valueOf(sum_temperature) +"+"+ String.valueOf(sum_friction);
 		String Count = String.valueOf(count);

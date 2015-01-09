@@ -113,9 +113,9 @@ public class Alldata_Spout extends BaseRichSpout{
 	    for(int i=0;i<jsonArray.length();i++) {
 	    	  EscalatorAttr ea = new EscalatorAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
-	    	  ea.set(Double.parseDouble(jb.getString("State_RollerFriction")), 
-	    			  Double.parseDouble(jb.getString("State_Temperature")),
-	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
+//	    	  ea.set(Double.parseDouble(jb.getString("State_RollerFriction")), 
+//	    			  Double.parseDouble(jb.getString("State_Temperature")),
+//	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += ea.toString() + "|||";
 	    }
 		//return res.substring(0, res.length()-3);
@@ -135,9 +135,9 @@ public class Alldata_Spout extends BaseRichSpout{
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  ElevatorAttr ea = new ElevatorAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
-	    	  ea.set(Double.parseDouble(jb.getString("State_MotorVibration")), 
-	    			  Double.parseDouble(jb.getString("State_Temperature")),
-	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
+//	    	  ea.set(Double.parseDouble(jb.getString("State_MotorVibration")), 
+//	    			  Double.parseDouble(jb.getString("State_Temperature")),
+//	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += ea.toString() + "|||";
 	    }
 		return res.substring(0, res.length()-3);
@@ -156,12 +156,12 @@ public class Alldata_Spout extends BaseRichSpout{
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  CMAttr cma = new CMAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
-	    	  cma.set(Double.parseDouble(jb.getString("State_HingeFriction")), 
-	    			  Double.parseDouble(jb.getString("State_Temperature")),
-	    			  Integer.parseInt(jb.getString("State_TicketErrors")),
-	    			  Integer.parseInt(jb.getString("State_TicketsAccepted")),
-	    			  Integer.parseInt(jb.getString("State_TicketsRefused")),
-	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
+//	    	  cma.set(Double.parseDouble(jb.getString("State_HingeFriction")), 
+//	    			  Double.parseDouble(jb.getString("State_Temperature")),
+//	    			  Integer.parseInt(jb.getString("State_TicketErrors")),
+//	    			  Integer.parseInt(jb.getString("State_TicketsAccepted")),
+//	    			  Integer.parseInt(jb.getString("State_TicketsRefused")),
+//	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += cma.toString() + "|||";
 	    }
 		return res.substring(0, res.length()-3);
@@ -180,10 +180,10 @@ public class Alldata_Spout extends BaseRichSpout{
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  TMAttr tma = new TMAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
-	    	  tma.set(Double.parseDouble(jb.getString("State_RemainingInk")), 
-	    			  Integer.parseInt(jb.getString("State_RemainingTickets")),
-	    			  Double.parseDouble(jb.getString("State_Temperature")),
-	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
+//	    	  tma.set(Double.parseDouble(jb.getString("State_RemainingInk")), 
+//	    			  Integer.parseInt(jb.getString("State_RemainingTickets")),
+//	    			  Double.parseDouble(jb.getString("State_Temperature")),
+//	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += tma.toString() + "|||";
 	    }
 		return res.substring(0, res.length()-3);

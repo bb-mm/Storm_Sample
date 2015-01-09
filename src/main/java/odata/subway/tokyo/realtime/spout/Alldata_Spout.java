@@ -118,7 +118,8 @@ public class Alldata_Spout extends BaseRichSpout{
 	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += ea.toString() + "|||";
 	    }
-		return res.substring(0, res.length()-3);
+		//return res.substring(0, res.length()-3);
+	    return res;
 	}
 	public String getElevatorAttr(String sub_line,String stat_num,String frame) throws ClientProtocolException, IOException, JSONException {
 		String res="";
@@ -292,7 +293,7 @@ public class Alldata_Spout extends BaseRichSpout{
 					tm = "|||";
 					}
 				}
-				collector.emit(new Values(line,num,escalator,elevator,tm,cm));
+				collector.emit(new Values(line,num,frame,escalator,elevator,tm,cm));
 			}
 		}
 		try {
@@ -325,7 +326,7 @@ public class Alldata_Spout extends BaseRichSpout{
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		// TODO Auto-generated method stub
-		declarer.declare(new Fields("Line","Num","Escalator","Elevator","TicketMachine","CheckMachine"));
+		declarer.declare(new Fields("Line","Num","Frame","Escalator","Elevator","TicketMachine","CheckMachine"));
 	}
 	public static void main(String args[]) throws JSONException, IOException, InterruptedException {
 		Alldata_Spout test = new Alldata_Spout();

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.olingo.odata2.api.edm.Edm;
+import org.apache.olingo.odata2.api.ep.entry.ODataEntry;
 import org.apache.olingo.odata2.api.exception.ODataException;
 
 import odata.subway.tokyo.realtime.OlingoClienApp;
@@ -37,17 +38,20 @@ public class Escalator_calc  extends BaseRichBolt{
 	public static String getUUID(){ 
         return UUID.randomUUID().toString(); 
 	}
-	public void write() {
+	public void write(Map data) {
 		OlingoClienApp clienApp = new OlingoClienApp();
 		 String usedFormat = "application/json";
 		 String serviceUrl = "http://mingding.chinacloudapp.cn/TokyoSubway/OdataServlet.cn/";
 		 try {
 			Edm edm = clienApp.readEdm(serviceUrl);
-
+			ODataEntry createdEntry = clienApp.createEntry(edm, serviceUrl, usedFormat, "Ts_escalatorhistorys", data);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ODataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -62,17 +66,30 @@ public class Escalator_calc  extends BaseRichBolt{
 		String num = tuple.getStringByField("Num");
 		String frame = tuple.getStringByField("Frame");
 		String info = tuple.getStringByField("Escalator");
-		String[] escalator = info.split("|||");
+		String[] escalator = info.split("BBMM");
 		count=escalator.length;
+		EscalatorAttr history = new EscalatorAttr();
 		for(int i=0;i<count;i++) {
 			//String[] escalator_attr = escalator[i].split("+");
 //			EscalatorAttr ea = new EscalatorAttr(escalator[i]);
 //			sum_temperature += ea.State_Temperature;
 //			sum_friction += ea.State_RollerFriction;
+			EscalatorAttr es = new EscalatorAttr();
+			es.fromString(escalator[i]);
+			if(i==count-1)
+				history = es;
+			sum_temperature += es.State_Temperature;
+			sum_friction += es.State_RollerFriction;
 		}
+		history.setTS_EscalatorDeviceName("AVG");
+		history.setState_RollerFriction(sum_friction/(double)count);
+		history.setState_Temperature(sum_temperature/(double)count);
+		history.setTS_EscalatorId(getUUID());
+		Map record = history.toMap();
+		write(record); //write the result to SQL Server
 		String Sum = String.valueOf(sum_temperature) +"+"+ String.valueOf(sum_friction);
 		String Count = String.valueOf(count);
-		collector.emit(new Values(line,num,frame,Sum,Count));
+		collector.emit(new Values(line,num,frame,Sum,Count,info)); //emit the data to next bolt for line sum and all sum
 	}
 
 	@Override
@@ -84,7 +101,7 @@ public class Escalator_calc  extends BaseRichBolt{
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		// TODO Auto-generated method stub
-		declarer.declare(new Fields("Line","Num","Frame","Sum","Count"));
+		declarer.declare(new Fields("Line","Num","Frame","Sum","Count","Basic"));
 	}
 
 }

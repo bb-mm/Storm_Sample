@@ -1,6 +1,8 @@
 package odata.subway.tokyo.realtime;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -249,6 +251,28 @@ public class ElevatorAttr {
 			this.setState_UpTime(Double.valueOf(s.getString("State_UpTime")));
 			this.setState_DeviceUpState(Integer.valueOf(s.getString("State_DeviceUpState")));
 			//this.setState_upDateTime(Timestamp.valueOf(s.getString("State_upDateTime")));
+		}
+		public HashMap toMap() {
+			HashMap res = new HashMap();
+			res.put("TS_ElevatorDeviceName", this.TS_ElevatorDeviceName);
+			res.put("TS_ElevatorId", this.TS_ElevatorId);
+			res.put("TS_HTAllStation", this.TS_HTAllStation);
+			res.put("TS_HTFrame", this.TS_HTFrame);
+			res.put("TS_HTFrameTime", this.TS_HTFrameTime);
+			res.put("TS_HTIsSingleDevice", this.TS_HTIsSingleDevice);
+			res.put("TS_ElevatorInsertionTimestamp", this.TS_ElevatorInsertionTimestamp);
+			res.put("TS_HTLineNum", this.TS_HTLineNum);
+			res.put("TS_HTLineOfStationNum", this.TS_HTLineOfStationNum);
+			res.put("State_DeviceUpStateDescription", this.State_DeviceUpStateDescription);
+			res.put("State_MotorEngagedTime", this.State_MotorEngagedTime);
+			res.put("State_MotorEngagedTimeExceptUpTime", this.State_MotorEngagedTimeExceptUpTime);
+			res.put("State_MotorVibration", this.State_MotorVibration);
+			res.put("State_Temperature", this.State_Temperature);
+			res.put("State_UpTime", this.State_UpTime);
+			res.put("State_DeviceUpState", this.State_DeviceUpState);
+			res.put("State_upDateTime", this.State_upDateTime);
+			res.put("TS_HTStationName", this.TS_HTStationName);
+			return res;
 		}
 		public static void main(String[] args) {
 			ElevatorAttr test = new ElevatorAttr();

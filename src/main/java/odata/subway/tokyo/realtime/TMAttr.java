@@ -1,6 +1,7 @@
 package odata.subway.tokyo.realtime;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -286,5 +287,27 @@ public class TMAttr {
 			this.setState_RemainingInk(Double.valueOf(s.getString("State_RemainingInk")));
 			this.setState_RemainingTickets(Integer.valueOf(s.getString("State_RemainingTickets")));
 		}
-
+		public HashMap toMap() {
+			HashMap res = new HashMap();
+			res.put("TS_DispenserDeviceName", this.TS_DispenserDeviceName);
+			res.put("TS_DispenserId", this.TS_DispenserId);
+			res.put("TS_HTAllStation", this.TS_HTAllStation);
+			res.put("TS_HTFrame", this.TS_HTFrame);
+			res.put("TS_HTFrameTime", this.TS_HTFrameTime);
+			res.put("TS_HTIsSingleDevice", this.TS_HTIsSingleDevice);
+			res.put("TS_DispenserInsertionTimestamp", this.TS_DispenserInsertionTimestamp);
+			res.put("TS_HTLineNum", this.TS_HTLineNum);
+			res.put("TS_HTLineOfStationNum", this.TS_HTLineOfStationNum);
+			res.put("State_DeviceUpStateDescription", this.State_DeviceUpStateDescription);
+			res.put("State_MotorEngagedTime", this.State_MotorEngagedTime);
+			res.put("State_MotorEngagedTimeExceptUpTime", this.State_MotorEngagedTimeExceptUpTime);
+			res.put("State_RemainingInk", this.State_RemainingInk);
+			res.put("State_Temperature", this.State_Temperature);
+			res.put("State_UpTime", this.State_UpTime);
+			res.put("State_DeviceUpState", this.State_DeviceUpState);
+			res.put("State_upDateTime", this.State_upDateTime);
+			res.put("TS_HTStationName", this.TS_HTStationName);
+			res.put("State_RemainingTickets", this.State_RemainingTickets);
+			return res;
+		}
 }

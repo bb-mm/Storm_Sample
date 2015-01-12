@@ -1,6 +1,7 @@
 package odata.subway.tokyo.realtime;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -344,5 +345,31 @@ public class CMAttr {
 			this.setState_TicketsRefused(Integer.valueOf(s.getString("State_TicketsRefused")));
 			this.setState_GateName(s.getString("State_GateName"));
 			this.setTS_GateDeviceFunction(s.getString("TS_GateDeviceFunction"));
+		}
+		public HashMap toMap() {
+			HashMap res = new HashMap();
+			res.put("TS_GateDeviceName", this.TS_GateDeviceName);
+			res.put("TS_GateId", this.TS_GateId);
+			res.put("TS_HTAllStation", this.TS_HTAllStation);
+			res.put("TS_HTFrame", this.TS_HTFrame);
+			res.put("TS_HTFrameTime", this.TS_HTFrameTime);
+			res.put("TS_HTIsSingleDevice", this.TS_HTIsSingleDevice);
+			res.put("TS_GateInsertionTimestamp", this.TS_GateInsertionTimestamp);
+			res.put("TS_HTLineNum", this.TS_HTLineNum);
+			res.put("TS_HTLineOfStationNum", this.TS_HTLineOfStationNum);
+			res.put("State_DeviceUpStateDescription", this.State_DeviceUpStateDescription);
+			res.put("State_MotorEngagedTime", this.State_MotorEngagedTime);
+			res.put("State_MotorEngagedTimeExceptUpTime", this.State_MotorEngagedTimeExceptUpTime);
+			res.put("TS_GateDeviceFunction", this.TS_GateDeviceFunction);
+			res.put("State_Temperature", this.State_Temperature);
+			res.put("State_UpTime", this.State_UpTime);
+			res.put("State_DeviceUpState", this.State_DeviceUpState);
+			res.put("State_upDateTime", this.State_upDateTime);
+			res.put("TS_HTStationName", this.TS_HTStationName);
+			res.put("State_HingeFriction", this.State_HingeFriction);
+			res.put("State_TicketErrors", this.State_TicketErrors);
+			res.put("State_TicketsAccepted", this.State_TicketsAccepted);
+			res.put("State_TicketsRefused", this.State_TicketsRefused);
+			return res;
 		}
 }

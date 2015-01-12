@@ -88,13 +88,13 @@ public class Alldata_Spout extends BaseRichSpout{
 	public JSONArray connect(String url,String frame) throws ClientProtocolException, IOException, JSONException {
 		//String frame = Double.toString(getDate());
 		String temp_url = url +"'" +frame+ "'";
-		System.out.println(temp_url);
+		//System.out.println(temp_url);
 		HttpClient client = new DefaultHttpClient();
 	    HttpGet post = new HttpGet(temp_url);
 	    HttpResponse response = client.execute(post);
 	    BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	    String line = rd.readLine();
-	    System.out.println(line);
+	    //System.out.println(line);
 	    JSONObject jObject  = new JSONObject(line); // json
 	    JSONObject data = jObject.getJSONObject("d"); // get data object
 	    JSONObject test = new JSONObject(data.toString());
@@ -114,7 +114,7 @@ public class Alldata_Spout extends BaseRichSpout{
 	    JSONArray jsonArray = connect(url,frame);
 	    Date d = new Date();
 	    if(jsonArray.length() == 0)
-	    	return "|||";
+	    	return "BBMM";
 	    for(int i=0;i<jsonArray.length();i++) {
 	    	  EscalatorAttr ea = new EscalatorAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
@@ -124,7 +124,7 @@ public class Alldata_Spout extends BaseRichSpout{
 //	    	  ea.set(Double.parseDouble(jb.getString("State_RollerFriction")), 
 //	    			  Double.parseDouble(jb.getString("State_Temperature")),
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
-	    	  res += ea.toString() + "|||";
+	    	  res += ea.toString() + "BBMM";
 	    }
 		//return res.substring(0, res.length()-3);
 	    return res;
@@ -140,7 +140,7 @@ public class Alldata_Spout extends BaseRichSpout{
 		JSONArray jsonArray = connect(url,frame);
 		Date d = new Date();
 		if(jsonArray.length() == 0)
-	    	return "|||";
+	    	return "BBMM";
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  ElevatorAttr ea = new ElevatorAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
@@ -150,7 +150,7 @@ public class Alldata_Spout extends BaseRichSpout{
 //	    	  ea.set(Double.parseDouble(jb.getString("State_MotorVibration")), 
 //	    			  Double.parseDouble(jb.getString("State_Temperature")),
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
-	    	  res += ea.toString() + "|||";
+	    	  res += ea.toString() + "BBMM";
 	    }
 		return res.substring(0, res.length()-3);
 	}
@@ -165,7 +165,7 @@ public class Alldata_Spout extends BaseRichSpout{
 		JSONArray jsonArray = connect(url,frame);
 		Date d = new Date();
 		if(jsonArray.length() == 0)
-	    	return "|||";
+	    	return "BBMM";
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  CMAttr cma = new CMAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
@@ -178,7 +178,7 @@ public class Alldata_Spout extends BaseRichSpout{
 //	    			  Integer.parseInt(jb.getString("State_TicketsAccepted")),
 //	    			  Integer.parseInt(jb.getString("State_TicketsRefused")),
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
-	    	  res += cma.toString() + "|||";
+	    	  res += cma.toString() + "BBMM";
 	    }
 		return res.substring(0, res.length()-3);
 	}
@@ -193,7 +193,7 @@ public class Alldata_Spout extends BaseRichSpout{
 		JSONArray jsonArray = connect(url,frame);
 		Date d = new Date();
 		if(jsonArray.length() == 0)
-	    	return "|||";
+	    	return "BBMM";
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  TMAttr tma = new TMAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
@@ -204,7 +204,7 @@ public class Alldata_Spout extends BaseRichSpout{
 //	    			  Integer.parseInt(jb.getString("State_RemainingTickets")),
 //	    			  Double.parseDouble(jb.getString("State_Temperature")),
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
-	    	  res += tma.toString() + "|||";
+	    	  res += tma.toString() + "BBMM";
 	    }
 		return res.substring(0, res.length()-3);
 	}
@@ -307,10 +307,10 @@ public class Alldata_Spout extends BaseRichSpout{
 					e.printStackTrace();
 				} finally {
 					if(escalator.length() < 3 || elevator.length() < 3 || cm.length() < 3 || tm.length() < 3) {
-					escalator = "|||";
-					elevator = "|||";
-					cm = "|||";
-					tm = "|||";
+					escalator = "BBMM";
+					elevator = "BBMM";
+					cm = "BBMM";
+					tm = "BBMM";
 					}
 				}
 				collector.emit(new Values(line,num,frame,escalator,elevator,tm,cm));
@@ -356,6 +356,14 @@ public class Alldata_Spout extends BaseRichSpout{
 		test.cma_test();
 		test.el_test();
 		test.es_test();
+//		ElevatorAttr es = new ElevatorAttr();
+//		String info = test.getElevatorAttr("4","16","16.9");
+//		System.out.println(info);
+//		String[] infos = info.split("BBMM");
+//		for(int i=0;i<infos.length;i++){
+//			System.out.println(infos[i]);
+//			es.fromString(infos[i]);
+//		}
 		//test.nextTuple();
 		//System.out.println(getEscalatorAttr());
 		//getLine();

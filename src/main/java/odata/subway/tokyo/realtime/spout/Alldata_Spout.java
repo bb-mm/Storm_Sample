@@ -9,6 +9,7 @@ import backtype.storm.tuple.Values;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,16 +88,18 @@ public class Alldata_Spout extends BaseRichSpout{
 	public JSONArray connect(String url,String frame) throws ClientProtocolException, IOException, JSONException {
 		//String frame = Double.toString(getDate());
 		String temp_url = url +"'" +frame+ "'";
-		//System.out.println(temp_url);
+		System.out.println(temp_url);
 		HttpClient client = new DefaultHttpClient();
 	    HttpGet post = new HttpGet(temp_url);
 	    HttpResponse response = client.execute(post);
 	    BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	    String line = rd.readLine();
+	    System.out.println(line);
 	    JSONObject jObject  = new JSONObject(line); // json
 	    JSONObject data = jObject.getJSONObject("d"); // get data object
 	    JSONObject test = new JSONObject(data.toString());
 	    JSONArray jsonArray = test.getJSONArray("results");
+	    
 	    return jsonArray;
 	}
 	public String getEscalatorAttr(String sub_line,String stat_num,String frame) throws ClientProtocolException, IOException, JSONException {
@@ -107,12 +110,17 @@ public class Alldata_Spout extends BaseRichSpout{
 		url = url.replaceAll("'","%27");
 		url = url.replaceAll("TS_HTLineNum eq 4", "TS_HTLineNum eq "+sub_line);
 		url = url.replaceAll("TS_HTLineOfStationNum eq 16", "TS_HTLineOfStationNum eq "+stat_num);
+		//System.out.println(url);
 	    JSONArray jsonArray = connect(url,frame);
+	    Date d = new Date();
 	    if(jsonArray.length() == 0)
 	    	return "|||";
 	    for(int i=0;i<jsonArray.length();i++) {
 	    	  EscalatorAttr ea = new EscalatorAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
+	    	  ea.fromJSON(jb);
+	    	  ea.setTS_EscalatorInsertionTimestamp(new Timestamp(d.getDate()));
+	    	  ea.setState_upDateTime(new Timestamp(d.getDate()));
 //	    	  ea.set(Double.parseDouble(jb.getString("State_RollerFriction")), 
 //	    			  Double.parseDouble(jb.getString("State_Temperature")),
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
@@ -130,11 +138,15 @@ public class Alldata_Spout extends BaseRichSpout{
 		url = url.replaceAll("TS_HTLineNum eq 4", "TS_HTLineNum eq "+sub_line);
 		url = url.replaceAll("TS_HTLineOfStationNum eq 16", "TS_HTLineOfStationNum eq "+stat_num);
 		JSONArray jsonArray = connect(url,frame);
+		Date d = new Date();
 		if(jsonArray.length() == 0)
 	    	return "|||";
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  ElevatorAttr ea = new ElevatorAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
+	    	  ea.fromJSON(jb);
+	    	  ea.setTS_ElevatorInsertionTimestamp(new Timestamp(d.getDate()));
+	    	  ea.setState_upDateTime(new Timestamp(d.getDate()));
 //	    	  ea.set(Double.parseDouble(jb.getString("State_MotorVibration")), 
 //	    			  Double.parseDouble(jb.getString("State_Temperature")),
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
@@ -151,11 +163,15 @@ public class Alldata_Spout extends BaseRichSpout{
 		url = url.replaceAll("TS_HTLineNum eq 4", "TS_HTLineNum eq "+sub_line);
 		url = url.replaceAll("TS_HTLineOfStationNum eq 16", "TS_HTLineOfStationNum eq "+stat_num);
 		JSONArray jsonArray = connect(url,frame);
+		Date d = new Date();
 		if(jsonArray.length() == 0)
 	    	return "|||";
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  CMAttr cma = new CMAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
+	    	  cma.fromJSON(jb);
+	    	  cma.setState_upDateTime(new Timestamp(d.getDate()));
+	    	  cma.setTS_GateInsertionTimestamp(new Timestamp(d.getDate()));
 //	    	  cma.set(Double.parseDouble(jb.getString("State_HingeFriction")), 
 //	    			  Double.parseDouble(jb.getString("State_Temperature")),
 //	    			  Integer.parseInt(jb.getString("State_TicketErrors")),
@@ -175,11 +191,15 @@ public class Alldata_Spout extends BaseRichSpout{
 		url = url.replaceAll("TS_HTLineNum eq 4", "TS_HTLineNum eq "+sub_line);
 		url = url.replaceAll("TS_HTLineOfStationNum eq 16", "TS_HTLineOfStationNum eq "+stat_num);
 		JSONArray jsonArray = connect(url,frame);
+		Date d = new Date();
 		if(jsonArray.length() == 0)
 	    	return "|||";
 		for(int i=0;i<jsonArray.length();i++) {
 	    	  TMAttr tma = new TMAttr();
 	    	  JSONObject jb = jsonArray.getJSONObject(i);
+	    	  tma.fromJSON(jb);
+	    	  tma.setState_upDateTime(new Timestamp(d.getDate()));
+	    	  tma.setTS_DispenserInsertionTimestamp(new Timestamp(d.getDate()));
 //	    	  tma.set(Double.parseDouble(jb.getString("State_RemainingInk")), 
 //	    			  Integer.parseInt(jb.getString("State_RemainingTickets")),
 //	    			  Double.parseDouble(jb.getString("State_Temperature")),
@@ -332,7 +352,10 @@ public class Alldata_Spout extends BaseRichSpout{
 		Alldata_Spout test = new Alldata_Spout();
 		test.getLines();
 		test.getStations();
-		//test.tma_test();
+		test.tma_test();
+		test.cma_test();
+		test.el_test();
+		test.es_test();
 		//test.nextTuple();
 		//System.out.println(getEscalatorAttr());
 		//getLine();

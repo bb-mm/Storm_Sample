@@ -2,6 +2,9 @@ package odata.subway.tokyo.realtime;
 
 import java.sql.Timestamp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ElevatorAttr {
 	
 	private String TS_ElevatorId;
@@ -227,7 +230,28 @@ public class ElevatorAttr {
 			this.setState_upDateTime(Timestamp.valueOf(attr[17]));
 			
 		}
+		public void fromJSON(JSONObject s) throws NumberFormatException, JSONException {
+			this.setTS_ElevatorDeviceName(s.getString("TS_ElevatorDeviceName"));
+			this.setTS_ElevatorId(s.getString("TS_ElevatorId"));
+			this.setTS_HTAllStation(s.getString("TS_HTAllStation"));
+			this.setTS_HTFrame(s.getString("TS_HTFrame"));
+			this.setTS_HTFrameTime(s.getString("TS_HTFrameTime"));
+			this.setTS_HTIsSingleDevice(s.getString("TS_HTIsSingleDevice"));
+			this.setTS_HTStationName(s.getString("TS_HTStationName"));
+			//this.setTS_ElevatorInsertionTimestamp(Timestamp.valueOf(s.getString("TS_ElevatorInsertionTimestamp")));
+			this.setTS_HTLineNum(Integer.valueOf(s.getString("TS_HTLineNum")));
+			this.setTS_HTLineOfStationNum(Integer.valueOf(s.getString("TS_HTLineOfStationNum")));
+			this.setState_DeviceUpStateDescription(s.getString("State_DeviceUpStateDescription"));
+			this.setState_MotorEngagedTime(Double.valueOf(s.getString("State_MotorEngagedTime")));
+			this.setState_MotorEngagedTimeExceptUpTime(Double.valueOf(s.getString("State_MotorEngagedTimeExceptUpTime")));
+			this.setState_MotorVibration(Double.valueOf(s.getString("State_MotorVibration")));
+			this.setState_Temperature(Double.valueOf(s.getString("State_Temperature")));
+			this.setState_UpTime(Double.valueOf(s.getString("State_UpTime")));
+			this.setState_DeviceUpState(Integer.valueOf(s.getString("State_DeviceUpState")));
+			//this.setState_upDateTime(Timestamp.valueOf(s.getString("State_upDateTime")));
+		}
 		public static void main(String[] args) {
 			ElevatorAttr test = new ElevatorAttr();
 		}
+		
 }

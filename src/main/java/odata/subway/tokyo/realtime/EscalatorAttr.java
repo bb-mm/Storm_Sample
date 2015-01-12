@@ -189,4 +189,49 @@ public class EscalatorAttr {
 	public void setState_upDateTime(Timestamp State_upDateTime) {
 		this.State_upDateTime = State_upDateTime;
 	}
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		String spliter = "ESC";
+		sb.append(this.getTS_EscalatorDeviceName()+spliter);
+		sb.append(this.getTS_EscalatorId()+spliter);
+		sb.append(this.getTS_HTAllStation()+spliter);
+		sb.append(this.getTS_HTFrame()+spliter);
+		sb.append(this.getTS_HTFrameTime()+spliter);
+		sb.append(this.getTS_HTIsSingleDevice()+spliter);
+		sb.append(this.getTS_HTStationName()+spliter);
+		sb.append(this.getTS_EscalatorInsertionTimestamp()+spliter);
+		sb.append(this.getTS_HTLineNum()+spliter);
+		sb.append(this.getTS_HTLineOfStationNum()+spliter);
+		sb.append(this.getState_DeviceUpStateDescription()+spliter);
+		sb.append(this.getState_MotorEngagedTime()+spliter);
+		sb.append(this.getState_MotorEngagedTimeExceptUpTime()+spliter);
+		sb.append(this.getState_RollerFriction()+spliter);
+		sb.append(this.getState_Temperature()+spliter);
+		sb.append(this.getState_UpTime()+spliter);
+		sb.append(this.getState_DeviceUpState()+spliter);
+		sb.append(this.getState_upDateTime());
+		return sb.toString();
+	}
+	public void fromString(String s) {
+		String attr[] = s.split("ESC");
+		this.setTS_EscalatorDeviceName(attr[0]);
+		this.setTS_EscalatorId(attr[1]);
+		this.setTS_HTAllStation(attr[2]);
+		this.setTS_HTFrame(attr[3]);
+		this.setTS_HTFrameTime(attr[4]);
+		this.setTS_HTIsSingleDevice(attr[5]);
+		this.setTS_HTStationName(attr[6]);
+		this.setTS_EscalatorInsertionTimestamp(Timestamp.valueOf(attr[7]));
+		this.setTS_HTLineNum(Integer.valueOf(attr[8]));
+		this.setTS_HTLineOfStationNum(Integer.valueOf(attr[9]));
+		this.setState_DeviceUpStateDescription(attr[10]);
+		this.setState_MotorEngagedTime(Double.valueOf(attr[11]));
+		this.setState_MotorEngagedTimeExceptUpTime(Double.valueOf(attr[12]));
+		this.setState_RollerFriction(Double.valueOf(attr[13]));
+		this.setState_Temperature(Double.valueOf(attr[14]));
+		this.setState_UpTime(Double.valueOf(attr[15]));
+		this.setState_DeviceUpState(Integer.valueOf(attr[16]));
+		this.setState_upDateTime(Timestamp.valueOf(attr[17]));
+		
+	}
 }

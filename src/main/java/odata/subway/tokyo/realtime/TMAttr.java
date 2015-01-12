@@ -216,5 +216,51 @@ public class TMAttr {
 		public void setState_upDateTime(Timestamp State_upDateTime) {
 			this.State_upDateTime = State_upDateTime;
 		}
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			String spliter = "DIS";
+			sb.append(this.getTS_DispenserDeviceName()+spliter);
+			sb.append(this.getTS_DispenserId()+spliter);
+			sb.append(this.getTS_HTAllStation()+spliter);
+			sb.append(this.getTS_HTFrame()+spliter);
+			sb.append(this.getTS_HTFrameTime()+spliter);
+			sb.append(this.getTS_HTIsSingleDevice()+spliter);
+			sb.append(this.getTS_HTStationName()+spliter);
+			sb.append(this.getTS_DispenserInsertionTimestamp()+spliter);
+			sb.append(this.getTS_HTLineNum()+spliter);
+			sb.append(this.getTS_HTLineOfStationNum()+spliter);
+			sb.append(this.getState_DeviceUpStateDescription()+spliter);
+			sb.append(this.getState_MotorEngagedTime()+spliter);
+			sb.append(this.getState_MotorEngagedTimeExceptUpTime()+spliter);
+			sb.append(this.getState_Temperature()+spliter);
+			sb.append(this.getState_UpTime()+spliter);
+			sb.append(this.getState_DeviceUpState()+spliter);
+			sb.append(this.getState_upDateTime());
+			sb.append(this.getState_RemainingInk()+spliter);
+			sb.append(this.getState_RemainingTickets());
+			return sb.toString();
+		}
+		public void fromString(String s) {
+			String attr[] = s.split("DIS");
+			this.setTS_DispenserDeviceName(attr[0]);
+			this.setTS_DispenserId(attr[1]);
+			this.setTS_HTAllStation(attr[2]);
+			this.setTS_HTFrame(attr[3]);
+			this.setTS_HTFrameTime(attr[4]);
+			this.setTS_HTIsSingleDevice(attr[5]);
+			this.setTS_HTStationName(attr[6]);
+			this.setTS_DispenserInsertionTimestamp(Timestamp.valueOf(attr[7]));
+			this.setTS_HTLineNum(Integer.valueOf(attr[8]));
+			this.setTS_HTLineOfStationNum(Integer.valueOf(attr[9]));
+			this.setState_DeviceUpStateDescription(attr[10]);
+			this.setState_MotorEngagedTime(Double.valueOf(attr[11]));
+			this.setState_MotorEngagedTimeExceptUpTime(Double.valueOf(attr[12]));
+			this.setState_Temperature(Double.valueOf(attr[13]));
+			this.setState_UpTime(Double.valueOf(attr[14]));
+			this.setState_DeviceUpState(Integer.valueOf(attr[15]));
+			this.setState_upDateTime(Timestamp.valueOf(attr[16]));
+			this.setState_RemainingInk(Double.valueOf(attr[17]));
+			this.setState_RemainingTickets(Integer.valueOf(attr[18]));
+		}
 
 }

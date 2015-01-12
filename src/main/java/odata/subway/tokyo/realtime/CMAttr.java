@@ -263,4 +263,58 @@ public class CMAttr {
 		public void setState_upDateTime(Timestamp State_upDateTime) {
 			this.State_upDateTime = State_upDateTime;
 		}
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			String spliter = "GATE";
+			sb.append(this.getTS_GateDeviceName()+spliter);
+			sb.append(this.getTS_GateId()+spliter);
+			sb.append(this.getTS_HTAllStation()+spliter);
+			sb.append(this.getTS_HTFrame()+spliter);
+			sb.append(this.getTS_HTFrameTime()+spliter);
+			sb.append(this.getTS_HTIsSingleDevice()+spliter);
+			sb.append(this.getTS_HTStationName()+spliter);
+			sb.append(this.getTS_GateInsertionTimestamp()+spliter);
+			sb.append(this.getTS_HTLineNum()+spliter);
+			sb.append(this.getTS_HTLineOfStationNum()+spliter);
+			sb.append(this.getState_DeviceUpStateDescription()+spliter);
+			sb.append(this.getState_MotorEngagedTime()+spliter);
+			sb.append(this.getState_MotorEngagedTimeExceptUpTime()+spliter);
+			sb.append(this.getState_Temperature()+spliter);
+			sb.append(this.getState_UpTime()+spliter);
+			sb.append(this.getState_DeviceUpState()+spliter);
+			sb.append(this.getState_upDateTime());
+			sb.append(this.getState_HingeFriction()+spliter);
+			sb.append(this.getState_TicketErrors()+spliter);
+			sb.append(this.getState_TicketsAccepted()+spliter);
+			sb.append(this.getState_TicketsRefused()+spliter);
+			sb.append(this.getState_GateName()+spliter);
+			sb.append(this.getTS_GateDeviceFunction());
+			return sb.toString();
+		}
+		public void fromString(String s) {
+			String attr[] = s.split("GATE");
+			this.setTS_GateDeviceName(attr[0]);
+			this.setTS_GateId(attr[1]);
+			this.setTS_HTAllStation(attr[2]);
+			this.setTS_HTFrame(attr[3]);
+			this.setTS_HTFrameTime(attr[4]);
+			this.setTS_HTIsSingleDevice(attr[5]);
+			this.setTS_HTStationName(attr[6]);
+			this.setTS_GateInsertionTimestamp(Timestamp.valueOf(attr[7]));
+			this.setTS_HTLineNum(Integer.valueOf(attr[8]));
+			this.setTS_HTLineOfStationNum(Integer.valueOf(attr[9]));
+			this.setState_DeviceUpStateDescription(attr[10]);
+			this.setState_MotorEngagedTime(Double.valueOf(attr[11]));
+			this.setState_MotorEngagedTimeExceptUpTime(Double.valueOf(attr[12]));
+			this.setState_Temperature(Double.valueOf(attr[13]));
+			this.setState_UpTime(Double.valueOf(attr[14]));
+			this.setState_DeviceUpState(Integer.valueOf(attr[15]));
+			this.setState_upDateTime(Timestamp.valueOf(attr[16]));
+			this.setState_HingeFriction(Double.valueOf(attr[17]));
+			this.setState_TicketErrors(Integer.valueOf(attr[18]));
+			this.setState_TicketsAccepted(Integer.valueOf(attr[19]));
+			this.setState_TicketsRefused(Integer.valueOf(attr[20]));
+			this.setState_GateName(attr[21]);
+			this.setTS_GateDeviceFunction(attr[22]);
+		}
 }

@@ -117,7 +117,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 		history.setTS_EscalatorId(getUUID());
 		Map record = history.toMap();
 		write(record,"Ts_escalatorhistorys"); //write the result to SQL Server
-		collector.emit(new Values(frame));
+		
 //		String Sum = String.valueOf(sum_temperature) +"+"+ String.valueOf(sum_friction);
 //		String Count = String.valueOf(count);
 //		collector.emit(new Values(line,num,frame,Sum,Count,info,"escalator")); //emit the data to next bolt for line sum and all sum
@@ -181,7 +181,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 		history.setTS_ElevatorId(getUUID());
 		Map record = history.toMap();
 		write(record,"Ts_elevatorhistorys"); //write the result to SQL Server
-		collector.emit(new Values(frame));
+		
 	}
 	public void executeGate(String line,String num,String frame,String info){
 		String key_sum_temp=frame+"_"+line+"_"+num+"_gate_"+"sum_temperature";
@@ -284,7 +284,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 		history.setTS_GateId(getUUID());
 		Map record = history.toMap();
 		write(record,"Ts_gatehistorys"); //write the result to SQL Server
-		collector.emit(new Values(frame));
+		
 	}
 	public void executeDispenser(String line,String num,String frame,String info) {
 		String key_sum_temp=frame+"_"+line+"_"+num+"_dispenser_"+"sum_temperature";
@@ -359,7 +359,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 		history.setTS_DispenserId(getUUID());
 		Map record = history.toMap();
 		write(record, "Ts_dispenserhistorys"); //write the result to SQL Server
-		collector.emit(new Values(frame));
+		
 	} 
 	@Override
 	public void execute(Tuple tuple) {
@@ -371,10 +371,12 @@ public class CalculatorBolt  extends BaseRichBolt{
 		String info_elevator = tuple.getStringByField("Elevator");
 		String info_gate = tuple.getStringByField("CheckMachine");
 		String info_dispenser = tuple.getStringByField("TicketMachine");
+		HashMap map = (HashMap)tuple.getValueByField("Map");
 		executeEscalator(line,num,frame,info_escalator);
 		executeElevator(line,num,frame,info_elevator);
 		executeGate(line,num,frame,info_gate);
 		executeDispenser(line,num,frame,info_dispenser);
+		collector.emit(new Values(frame));
 		//TODO add emit
 	}
 

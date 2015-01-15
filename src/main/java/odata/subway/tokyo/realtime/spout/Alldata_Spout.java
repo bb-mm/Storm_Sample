@@ -287,6 +287,20 @@ public class Alldata_Spout extends BaseRichSpout{
 	@Override
 	public void nextTuple() {
 		// TODO Auto-generated method stub
+		try {
+			getLines();
+			getStations();
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		String frame = Double.toString(getDate());
 		for(String line:subway.keySet()) {
 			for(String num:subway.get(line)) {

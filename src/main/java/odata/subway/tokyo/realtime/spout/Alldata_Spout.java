@@ -182,6 +182,31 @@ public class Alldata_Spout extends BaseRichSpout{
 	    }
 		return res.substring(0, res.length()-4);
 	}
+	public String getPeopleAttr(String sub_line,String stat_num,String frame) throws ClientProtocolException, IOException, JSONException {
+		String res = "";
+		String url = "http://mingding.chinacloudapp.cn/TokyoSubway/OdataServlet.cn/Ts_totalpassengerhistorys?"
+			 + "$format=json&$filter=TS_HTLineNum eq 4 and TS_HTLineOfStationNum eq 16 and TS_HTFrame eq";
+		url = url.replaceAll(" ","%20");
+		url = url.replaceAll("'","%27");
+		url = url.replaceAll("TS_HTLineNum eq 4", "TS_HTLineNum eq "+sub_line);
+		url = url.replaceAll("TS_HTLineOfStationNum eq 16", "TS_HTLineOfStationNum eq "+stat_num);
+		JSONArray jsonArray = connect(url,frame);
+		Date d = new Date();
+		//System.out.println(jsonArray.length());
+		if(jsonArray.length() == 0)
+	    	return "BBMM";
+		for(int i=0;i<jsonArray.length();i++) {
+	    	  PeopleHistory ph = new PeopleHistory();
+	    	  JSONObject jb = jsonArray.getJSONObject(i);
+	    	  ph.fromJSON(jb);
+//	    	  tma.set(Double.parseDouble(jb.getString("State_RemainingInk")), 
+//	    			  Integer.parseInt(jb.getString("State_RemainingTickets")),
+//	    			  Double.parseDouble(jb.getString("State_Temperature")),
+//	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
+	    	  res += ph.toString() + "BBMM";
+	    }
+		return res.substring(0, res.length()-4);
+	}
 	public String getTMAttr(String sub_line,String stat_num,String frame) throws ClientProtocolException, IOException, JSONException {
 		String res = "";
 		String url = "http://mingding.chinacloudapp.cn/TokyoSubway/OdataServlet.cn/Ts_dispenserhistorys?"
@@ -214,6 +239,25 @@ public class Alldata_Spout extends BaseRichSpout{
 			for(String num:subway.get(line)) {
 				try {
 					System.out.println(getEscalatorAttr(line,num,frame));
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	public void people_test() {
+		String frame = Double.toString(getDate());
+		for(String line:subway.keySet()) {
+			for(String num:subway.get(line)) {
+				try {
+					System.out.println(getPeopleAttr(line,num,frame));
 				} catch (ClientProtocolException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -290,12 +334,13 @@ public class Alldata_Spout extends BaseRichSpout{
 		String frame = Double.toString(getDate());
 		for(String line:subway.keySet()) {
 			for(String num:subway.get(line)) {
-				String escalator="",elevator="",cm="",tm="";
+				String escalator="",elevator="",cm="",tm="",people="";
 				try {
 					escalator = getEscalatorAttr(line,num,frame);
 					elevator = getElevatorAttr(line,num,frame);
 					cm = getCMAttr(line,num,frame);
 					tm = getTMAttr(line,num,frame);
+					people = getPeopleAttr(line,num,frame);
 //					System.out.println("+++++++++"+escalator);
 //					System.out.println("+++++++++"+elevator);
 //					System.out.println("+++++++++"+cm);
@@ -310,14 +355,16 @@ public class Alldata_Spout extends BaseRichSpout{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} finally {
-					if(escalator.length() < 3 || elevator.length() < 3 || cm.length() < 3 || tm.length() < 3) {
+					if(escalator.length() < 3 || elevator.length() < 3 || cm.length() < 3 || tm.length() < 3
+							|| people.length() < 3) {
 					escalator = "BBMM";
 					elevator = "BBMM";
 					cm = "BBMM";
 					tm = "BBMM";
+					people = "BBMM";
 					}
 				}
-				collector.emit(new Values(line,num,frame,escalator,elevator,tm,cm));
+				collector.emit(new Values(line,num,frame,escalator,elevator,tm,cm,people));
 			}
 		}
 		try {
@@ -350,16 +397,17 @@ public class Alldata_Spout extends BaseRichSpout{
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		// TODO Auto-generated method stub
-		declarer.declare(new Fields("Line","Num","Frame","Escalator","Elevator","TicketMachine","CheckMachine"));
+		declarer.declare(new Fields("Line","Num","Frame","Escalator","Elevator","TicketMachine","CheckMachine","People"));
 	}
 	public static void main(String args[]) throws JSONException, IOException, InterruptedException {
 		Alldata_Spout test = new Alldata_Spout();
 		test.getLines();
 		test.getStations();
-		test.tma_test();
-		test.cma_test();
-		test.el_test();
-		test.es_test();
+//		test.tma_test();
+//		test.cma_test();
+//		test.el_test();
+//		test.es_test();
+		test.people_test();
 //		ElevatorAttr es = new ElevatorAttr();
 //		String info = test.getElevatorAttr("4","16","16.9");
 //		System.out.println(info);

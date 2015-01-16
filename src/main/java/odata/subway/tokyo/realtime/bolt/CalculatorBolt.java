@@ -13,6 +13,7 @@ import odata.subway.tokyo.realtime.CMAttr;
 import odata.subway.tokyo.realtime.ElevatorAttr;
 import odata.subway.tokyo.realtime.OlingoClienApp;
 import odata.subway.tokyo.realtime.EscalatorAttr;
+import odata.subway.tokyo.realtime.PeopleHistory;
 import odata.subway.tokyo.realtime.TMAttr;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -184,6 +185,33 @@ public class CalculatorBolt  extends BaseRichBolt{
 		Map record = history.toMap();
 		write(record,"Ts_elevatorhistorys"); //write the result to SQL Server
 		
+	}
+	public void executePeople(String line,String num,String frame,String info){
+		String key_sum_people=frame+"_"+line+"_"+num+"_"+"sum_people";
+		int people_sum=0;
+		int count=0;
+		String[] people = info.split("BBMM");
+		count=people.length;
+		PeopleHistory history = new PeopleHistory();
+		for(int i=0;i<count;i++) {
+			//String[] escalator_attr = escalator[i].split("+");
+//			EscalatorAttr ea = new EscalatorAttr(escalator[i]);
+//			sum_temperature += ea.State_Temperature;
+//			sum_friction += ea.State_RollerFriction;
+			PeopleHistory es = new PeopleHistory();
+			es.fromString(people[i]);
+			if(i==count-1)
+				history = es;
+			people_sum += es.getTS_HTTotalPassenger();
+		}
+		//System.out.println("ElevatorAttr:"+sum_temperature+","+sum_vibration);
+		if(redis.get(key_sum_people) == null){
+			redis.set(key_sum_people, String.valueOf(people_sum));
+		}
+		else{
+			int temp_value = Integer.parseInt(redis.get(key_sum_people)) + people_sum;
+			redis.set(key_sum_people, String.valueOf(temp_value));
+		}
 	}
 	public void executeGate(String line,String num,String frame,String info){
 		String key_sum_temp=frame+"_"+line+"_"+num+"_gate_"+"sum_temperature";
@@ -375,11 +403,13 @@ public class CalculatorBolt  extends BaseRichBolt{
 		String info_elevator = tuple.getStringByField("Elevator");
 		String info_gate = tuple.getStringByField("CheckMachine");
 		String info_dispenser = tuple.getStringByField("TicketMachine");
+		String info_people = tuple.getStringByField("People");
 		//HashMap map = (HashMap)tuple.getValueByField("Map");
 		executeEscalator(line,num,frame,info_escalator);
 		executeElevator(line,num,frame,info_elevator);
 		executeGate(line,num,frame,info_gate);
 		executeDispenser(line,num,frame,info_dispenser);
+		executePeople(line,num,frame,info_people);
 		collector.emit(new Values(frame));
 		//TODO add emit
 	}

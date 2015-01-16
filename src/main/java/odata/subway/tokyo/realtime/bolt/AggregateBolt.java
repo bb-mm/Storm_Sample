@@ -14,6 +14,7 @@ import odata.subway.tokyo.realtime.CMAttr_history;
 import odata.subway.tokyo.realtime.ElevatorAttr_history;
 import odata.subway.tokyo.realtime.Escalator_history;
 import odata.subway.tokyo.realtime.OlingoClienApp;
+import odata.subway.tokyo.realtime.PeopleHistory;
 import odata.subway.tokyo.realtime.TMAttr_history;
 
 import org.apache.http.HttpResponse;
@@ -134,10 +135,12 @@ public class AggregateBolt  extends BaseRichBolt{
 	public String getFrame() {
 		return current_frame;
 	}
-	public Map setGateAttr(String line,String num,String name,String all,double temp,double fric,int error,int rej,int ac,int count) {
+	public Map setGateAttr(String id,String line,String num,String name,String all,double temp,double fric,int error,int rej,int ac,int count) {
 		Date d = new Date();
 		CMAttr_history history = new CMAttr_history();
-		history.setTS_GateId("0"); // 0 for Gate
+		history.setTS_GateId(id); // 00 for Gate -- station
+								// 01 for Gate -- line
+								// 02 for Gate -- all
 		history.setTS_GateInsertionTimestamp(new Timestamp(d.getDate()));
 		history.setTS_HTFrame(String.valueOf(getDate()));
 		history.setTS_HTFrameTime(String.valueOf(getDate()));
@@ -162,10 +165,10 @@ public class AggregateBolt  extends BaseRichBolt{
 		history.setState_DeviceUpStateDescription(null);//设备运行状态描述,如"正常" "警告,温度过高" "故障"
 		return history.toMap();
 	}
-	public Map setElevatorAttr(String line,String num,String name,String all,double temp,double vib,int count) {
+	public Map setElevatorAttr(String id,String line,String num,String name,String all,double temp,double vib,int count) {
 		Date d = new Date();
 		ElevatorAttr_history history = new ElevatorAttr_history();
-		 history.setTS_ElevatorId("1"); //1 for elevator
+		 history.setTS_ElevatorId(id); 
 		  history.setTS_ElevatorDeviceName("ElevatorHistory");//设备名
 		  history.setTS_ElevatorInsertionTimestamp(new Timestamp(d.getDate()));//设备接入时间
 		  history.setTS_HTFrame(String.valueOf(getDate()));//当前帧
@@ -187,11 +190,30 @@ public class AggregateBolt  extends BaseRichBolt{
 
 		return history.toMap();
 	}
-	public Map setEscalatorAttr(String line,String num,String name,String all,double temp,double fric,int count){
+	public Map setPeopleAttr(String id,String line,String num,String name,String all,int sum,int max) {
+		Date d = new Date();
+		PeopleHistory history = new PeopleHistory();
+		 history.setTS_HTId(id); //5 for total num of passengers
+		 history.setTS_HTupDateTime(new Timestamp(d.getDate()));
+		 history.setTS_HTFrame(String.valueOf(getDate()));
+		 history.setTS_HTMaxTotalPassenger(max);
+		 history.setTS_MaxTotalPassenger(max);
+		  /* 标记为allstation记录 */
+		  history.setTS_HTLineNum(Integer.parseInt(line));//
+		  history.setTS_HTLineOfStationNum(Integer.parseInt(num));//line中的第几站,0表示为line的记录
+		  history.setTS_HTAllStation(all);//
+		  history.setTS_HTStationName(name);
+		  /* 需要统计的属性 */
+		  history.setTS_HTTotalPassenger(sum);
+		  history.setTS_HTTotalPassengerForTenThousand(sum/(double)10000);
+
+		return history.toMap();
+	}
+	public Map setEscalatorAttr(String id,String line,String num,String name,String all,double temp,double fric,int count){
 		Date d =new Date();
 		Escalator_history history = new Escalator_history();
 		 history.setTS_EscalatorInsertionTimestamp(new Timestamp(d.getDate()));
-		  history.setTS_EscalatorId("2");//2 for escalator
+		  history.setTS_EscalatorId(id);//2 for escalator
 		  history.setTS_EscalatorDeviceName("EscalatorHistory");
 		  history.setState_UpTime(0);
 		  history.setTS_HTFrame(String.valueOf(getDate()));
@@ -211,10 +233,10 @@ public class AggregateBolt  extends BaseRichBolt{
 		  history.setState_DeviceUpStateDescription("null");//设备运行状态描述,如"正常" "警告,温度过高" "故障"
 		  return history.toMap();
 	}
-	public Map setDispenserAttr(String line,String num,String name,String all,double temp,double ink,int tickets,int count) {
+	public Map setDispenserAttr(String id,String line,String num,String name,String all,double temp,double ink,int tickets,int count) {
 		Date d = new Date();
 		TMAttr_history history = new TMAttr_history();
-		history.setTS_DispenserId("3"); //3 for dispenser
+		history.setTS_DispenserId(id); //3 for dispenser
 		history.setTS_HTFrame(String.valueOf(getDate()));
 		history.setTS_HTFrameTime(String.valueOf(getDate()));
 		history.setTS_DispenserInsertionTimestamp(new Timestamp(d.getDate()));
@@ -272,9 +294,10 @@ public class AggregateBolt  extends BaseRichBolt{
 				ac_allLine += res_ac;
 				rej_allLine += res_rej;
 				count_allLine += count;
-				Map data = setGateAttr(line,num,num,"null",res_temp,res_fric,res_error,res_rej,res_ac,count);
+				Map data = setGateAttr("00",line,num,num,"null",res_temp,res_fric,res_error,res_rej,res_ac,count);
 				//write(data,"Ts_thirtydaygatehistorys");
 				write(data,"Ts_gatehistorys");
+				write(data,"Ts_thirtydaygatehistorys");
 			}
 			temp_all += temp_allLine;
 			fric_all += fric_allLine;
@@ -282,13 +305,15 @@ public class AggregateBolt  extends BaseRichBolt{
 			rej_all += rej_allLine;
 			ac_all += ac_allLine;
 			count_all += count_allLine;
-			Map data = setGateAttr(line,"0","null","null",temp_allLine,fric_allLine,error_allLine,rej_allLine,ac_allLine,count_allLine);
+			Map data = setGateAttr("01",line,"0","null","null",temp_allLine,fric_allLine,error_allLine,rej_allLine,ac_allLine,count_allLine);
 			//write(data,"Ts_thirtydaygatehistorys");
 			write(data,"Ts_gatehistorys");
+			write(data,"Ts_thirtydaygatehistorys");
 		}
-		Map data = setGateAttr("0","0","null","allstation",temp_all,fric_all,error_all,rej_all,ac_all,count_all);
+		Map data = setGateAttr("00","0","0","null","allstation",temp_all,fric_all,error_all,rej_all,ac_all,count_all);
 		//write(data,"Ts_thirtydaygatehistorys");
 		write(data,"Ts_gatehistorys");
+		write(data,"Ts_thirtydaygatehistorys");
 	}
 	public void calcDispenser(String frame) {
 		Date d = new Date();
@@ -314,21 +339,24 @@ public class AggregateBolt  extends BaseRichBolt{
 				ink_allLine+=res_ink;
 				tickets_allLine +=res_tickets;
 				count_allLine += count;
-				Map data = setDispenserAttr(line,num,num,"null",res_temp,res_ink,res_tickets,count);
+				Map data = setDispenserAttr("10",line,num,num,"null",res_temp,res_ink,res_tickets,count);
 				//write(data,"Ts_thirtydaygatehistorys");
 				write(data,"Ts_dispenserhistorys");
+				write(data,"Ts_thirtydaydispenserhistorys");
 			}
 			temp_all += temp_allLine;
 			ink_all += ink_allLine;
 			tickets_all += tickets_allLine;
 			count_all += count_allLine;
-			Map data = setDispenserAttr(line,"0","null","null",temp_allLine,ink_allLine,tickets_allLine,count_allLine);
+			Map data = setDispenserAttr("11",line,"0","null","null",temp_allLine,ink_allLine,tickets_allLine,count_allLine);
 			//write(data,"Ts_thirtydaygatehistorys");
 			write(data,"Ts_dispenserhistorys");
+			write(data,"Ts_thirtydaydispenserhistorys");
 		}
-		Map data = setDispenserAttr("0","0","null","allstation",temp_all,ink_all,tickets_all,count_all);
+		Map data = setDispenserAttr("12","0","0","null","allstation",temp_all,ink_all,tickets_all,count_all);
 		//write(data,"Ts_thirtydaygatehistorys");
 		write(data,"Ts_dispenserhistorys");
+		write(data,"Ts_thirtydaydispenserhistorys");
 	}
 	public void calcElevator(String frame) {
 		Date d = new Date();
@@ -349,20 +377,48 @@ public class AggregateBolt  extends BaseRichBolt{
 				temp_allLine+=res_temp;
 				vib_allLine+=res_vib;
 				count_allLine += count;
-				Map data = setElevatorAttr(line,num,num,"null",res_temp,res_vib,count);
+				Map data = setElevatorAttr("20",line,num,num,"null",res_temp,res_vib,count);
 				//write(data,"Ts_thirtydaygatehistorys");
 				write(data,"Ts_elevatorhistorys");
+				write(data,"Ts_thirtydayelevatorhistorys");
 			}
 			temp_all += temp_allLine;
 			vib_all += vib_allLine;
 			count_all += count_allLine;
-			Map data = setElevatorAttr(line,"0","null","null",temp_allLine,vib_allLine,count_allLine);
+			Map data = setElevatorAttr("21",line,"0","null","null",temp_allLine,vib_allLine,count_allLine);
 			//write(data,"Ts_thirtydaygatehistorys");
 			write(data,"Ts_elevatorhistorys");
+			write(data,"Ts_thirtydayelevatorhistorys");
 		}
-		Map data = setElevatorAttr("0","0","null","allstation",temp_all,vib_allLine,count_all);
+		Map data = setElevatorAttr("22","0","0","null","allstation",temp_all,vib_allLine,count_all);
 		//write(data,"Ts_thirtydaygatehistorys");
 		write(data,"Ts_elevatorhistorys");
+		write(data,"Ts_thirtydayelevatorhistorys");
+	}
+	public void calcPeople(String frame) {
+		Date d = new Date();
+		int sum_line=0;
+		int sum_all=0;
+		for(String line:subway.keySet()) {
+			for(String num:subway.get(line)) {
+				String key_sum_people=frame+"_"+line+"_"+num+"_"+"sum_people";
+				int sum_temp = Integer.parseInt(redis.get(key_sum_people));
+				sum_line += sum_temp;
+				Map data = setPeopleAttr("50",line,num,num,"null",sum_temp,500000);
+				//write(data,"Ts_thirtydaygatehistorys");
+				write(data,"Ts_totalpassengerhistorys");
+				write(data,"Ts_thirtydaytotalpassengerhistorys");
+			}
+			sum_all += sum_line;
+			Map data = setPeopleAttr("50",line,"0","null","null",sum_line,500000);
+			//write(data,"Ts_thirtydaygatehistorys");
+			write(data,"Ts_totalpassengerhistorys");
+			write(data,"Ts_thirtydaytotalpassengerhistorys");
+		}
+		Map data = setPeopleAttr("50","0","0","null","allstation",sum_all,500000);
+		//write(data,"Ts_thirtydaygatehistorys");
+		write(data,"Ts_totalpassengerhistorys");
+		write(data,"Ts_thirtydaytotalpassengerhistorys");
 	}
 	public void calcEscalator(String frame) {
 		Date d = new Date();
@@ -383,20 +439,23 @@ public class AggregateBolt  extends BaseRichBolt{
 				temp_allLine+=res_temp;
 				fric_allLine+=res_fric;
 				count_allLine += count;
-				Map data = setElevatorAttr(line,num,num,"null",res_temp,res_fric,count);
+				Map data = setElevatorAttr("30",line,num,num,"null",res_temp,res_fric,count);
 				//write(data,"Ts_thirtydaygatehistorys");
 				write(data,"Ts_escalatorhistorys");
+				write(data,"Ts_thirtydayescalatorhistorys");
 			}
 			temp_all += temp_allLine;
 			fric_all += fric_allLine;
 			count_all += count_allLine;
-			Map data = setElevatorAttr(line,"0","null","null",temp_allLine,fric_allLine,count_allLine);
+			Map data = setElevatorAttr("30",line,"0","null","null",temp_allLine,fric_allLine,count_allLine);
 			//write(data,"Ts_thirtydaygatehistorys");
 			write(data,"Ts_escalatorhistorys");
+			write(data,"Ts_thirtydayescalatorhistorys");
 		}
-		Map data = setElevatorAttr("0","0","null","allstation",temp_all,fric_allLine,count_all);
+		Map data = setElevatorAttr("30","0","0","null","allstation",temp_all,fric_allLine,count_all);
 		//write(data,"Ts_thirtydaygatehistorys");
 		write(data,"Ts_escalatorhistorys");
+		write(data,"Ts_thirtydayescalatorhistorys");
 	}
 	@Override
 	public void execute(Tuple tuple) {
@@ -412,6 +471,7 @@ public class AggregateBolt  extends BaseRichBolt{
 			calcDispenser(getFrame());
 			calcElevator(getFrame());
 			calcEscalator(getFrame());
+			calcPeople(getFrame());
 			this.stopwatch.reset();
 			this.stopwatch.start();
 		}

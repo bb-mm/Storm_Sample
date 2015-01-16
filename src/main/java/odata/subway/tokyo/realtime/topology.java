@@ -20,21 +20,21 @@ public class topology {
 	        //conf.put("wordsFile", "OData-test.csv");
 	        conf.setDebug(false);
 	        conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 1);
-//	        LocalCluster cluster = new LocalCluster();
-//	        cluster.submitTopology("test", conf, builder.createTopology());
+	        LocalCluster cluster = new LocalCluster();
+	        cluster.submitTopology("test", conf, builder.createTopology());
 //	        //Thread.sleep(1000);
 	        //cluster.shutdown();
 //	        conf.setNumWorkers(5);
 //	        conf.setMaxSpoutPending(5000); 
-	        try {
-				StormSubmitter.submitTopology("temp-monitor-topology",conf,builder.createTopology());
-			} catch (AlreadyAliveException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidTopologyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//	        try {
+//				StormSubmitter.submitTopology("TokyoSubwayRealTimeAnalytic",conf,builder.createTopology());
+//			} catch (AlreadyAliveException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (InvalidTopologyException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 	}
 	
 }

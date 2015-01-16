@@ -286,7 +286,7 @@ public class CMAttr {
 			sb.append(this.getState_Temperature()+spliter);
 			sb.append(this.getState_UpTime()+spliter);
 			sb.append(this.getState_DeviceUpState()+spliter);
-			sb.append(this.getState_upDateTime());
+			sb.append(this.getState_upDateTime()+spliter);
 			sb.append(this.getState_HingeFriction()+spliter);
 			sb.append(this.getState_TicketErrors()+spliter);
 			sb.append(this.getState_TicketsAccepted()+spliter);

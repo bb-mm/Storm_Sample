@@ -239,7 +239,7 @@ public class TMAttr {
 			sb.append(this.getState_Temperature()+spliter);
 			sb.append(this.getState_UpTime()+spliter);
 			sb.append(this.getState_DeviceUpState()+spliter);
-			sb.append(this.getState_upDateTime());
+			sb.append(this.getState_upDateTime()+spliter);
 			sb.append(this.getState_RemainingInk()+spliter);
 			sb.append(this.getState_RemainingTickets());
 			return sb.toString();

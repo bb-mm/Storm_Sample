@@ -127,7 +127,7 @@ public class Alldata_Spout extends BaseRichSpout{
 	    	  res += ea.toString() + "BBMM";
 	    }
 		//return res.substring(0, res.length()-3);
-	    return res;
+	    return res.substring(0, res.length()-4);
 	}
 	public String getElevatorAttr(String sub_line,String stat_num,String frame) throws ClientProtocolException, IOException, JSONException {
 		String res="";
@@ -152,7 +152,7 @@ public class Alldata_Spout extends BaseRichSpout{
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += ea.toString() + "BBMM";
 	    }
-		return res.substring(0, res.length()-3);
+		return res.substring(0, res.length()-4);
 	}
 	public String getCMAttr(String sub_line,String stat_num,String frame) throws ClientProtocolException, IOException, JSONException {
 		String res = "";
@@ -180,7 +180,7 @@ public class Alldata_Spout extends BaseRichSpout{
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += cma.toString() + "BBMM";
 	    }
-		return res.substring(0, res.length()-3);
+		return res.substring(0, res.length()-4);
 	}
 	public String getTMAttr(String sub_line,String stat_num,String frame) throws ClientProtocolException, IOException, JSONException {
 		String res = "";
@@ -206,7 +206,7 @@ public class Alldata_Spout extends BaseRichSpout{
 //	    			  Integer.parseInt(jb.getString("State_DeviceUpState")));
 	    	  res += tma.toString() + "BBMM";
 	    }
-		return res.substring(0, res.length()-3);
+		return res.substring(0, res.length()-4);
 	}
 	public void es_test() {
 		String frame = Double.toString(getDate());
@@ -286,20 +286,6 @@ public class Alldata_Spout extends BaseRichSpout{
 	}
 	@Override
 	public void nextTuple() {
-		// TODO Auto-generated method stub
-		try {
-			getLines();
-			getStations();
-		} catch (ClientProtocolException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		String frame = Double.toString(getDate());
 		for(String line:subway.keySet()) {
@@ -310,6 +296,10 @@ public class Alldata_Spout extends BaseRichSpout{
 					elevator = getElevatorAttr(line,num,frame);
 					cm = getCMAttr(line,num,frame);
 					tm = getTMAttr(line,num,frame);
+//					System.out.println("+++++++++"+escalator);
+//					System.out.println("+++++++++"+elevator);
+//					System.out.println("+++++++++"+cm);
+//					System.out.println("+++++++++"+tm);
 				} catch (ClientProtocolException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

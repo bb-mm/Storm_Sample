@@ -83,6 +83,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 			sum_temperature += es.getState_Temperature();
 			sum_friction += es.getState_RollerFriction();
 		}
+		//System.out.println("Escalator:"+sum_temperature+","+sum_friction);
 		if(redis.get(key_sum_temp) == null){
 			redis.set(key_sum_temp, String.valueOf(sum_temperature));
 			redis.set(key_sum_temp_now, String.valueOf(sum_temperature));
@@ -147,6 +148,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 			sum_temperature += es.getState_Temperature();
 			sum_vibration += es.getState_MotorVibration();
 		}
+		//System.out.println("ElevatorAttr:"+sum_temperature+","+sum_vibration);
 		if(redis.get(key_sum_temp) == null){
 			redis.set(key_sum_temp, String.valueOf(sum_temperature));
 			redis.set(key_sum_temp_now, String.valueOf(sum_temperature));
@@ -220,6 +222,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 			sum_error += es.getState_TicketErrors();
 			sum_rej += es.getState_TicketsRefused();
 		}
+		//System.out.println("CMAttr:"+sum_temperature+","+sum_friction+","+sum_ac+","+sum_error+","+sum_rej);
 		if(redis.get(key_sum_temp) == null){
 			redis.set(key_sum_temp, String.valueOf(sum_temperature));
 			redis.set(key_sum_temp_now, String.valueOf(sum_temperature));
@@ -315,6 +318,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 			sum_ink += es.getState_RemainingInk();
 			sum_tickets += es.getState_RemainingTickets();
 		}
+		//System.out.println("TMAttr:"+sum_temperature+","+sum_ink+","+sum_ink);
 		if(redis.get(key_sum_temp) == null){
 			redis.set(key_sum_temp, String.valueOf(sum_temperature));
 			redis.set(key_sum_temp_now, String.valueOf(sum_temperature));
@@ -371,7 +375,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 		String info_elevator = tuple.getStringByField("Elevator");
 		String info_gate = tuple.getStringByField("CheckMachine");
 		String info_dispenser = tuple.getStringByField("TicketMachine");
-		HashMap map = (HashMap)tuple.getValueByField("Map");
+		//HashMap map = (HashMap)tuple.getValueByField("Map");
 		executeEscalator(line,num,frame,info_escalator);
 		executeElevator(line,num,frame,info_elevator);
 		executeGate(line,num,frame,info_gate);
@@ -392,5 +396,7 @@ public class CalculatorBolt  extends BaseRichBolt{
 		// TODO Auto-generated method stub
 		declarer.declare(new Fields("Frame"));
 	}
-
+	public static void main(String args[]) {
+		
+	}
 }

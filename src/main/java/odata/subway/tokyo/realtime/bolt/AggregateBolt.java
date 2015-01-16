@@ -77,7 +77,7 @@ public class AggregateBolt  extends BaseRichBolt{
 	    	JSONObject jb = jsonArray.getJSONObject(i);
 	    	String num = jb.getString("TS_LineNum");
 	    	//System.out.println(num);
-	    	subway.put(num, new ArrayList<String>());
+	    	this.subway.put(num, new ArrayList<String>());
 	    }
 	    //System.out.println(subway.entrySet().size());
 	}
@@ -101,7 +101,7 @@ public class AggregateBolt  extends BaseRichBolt{
 	    	JSONObject jb = jsonArray.getJSONObject(i);
 	    	String num = jb.getString("TS_LineOfStationNum");
 	    	//System.out.println(num);
-	    	subway.get(line).add(num);
+	    	this.subway.get(line).add(num);
 	    }
 		}
 	}
@@ -403,19 +403,7 @@ public class AggregateBolt  extends BaseRichBolt{
 		// TODO Auto-generated method stub
 		String frame = tuple.getString(0);
 		if(logIntervalInSeconds <= stopwatch.elapsed(TimeUnit.SECONDS)) {
-			try {
-				getLines();
-				getStations();
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			
 			if(Double.parseDouble(getFrame()) > Double.parseDouble(frame)) {
 				setFrame(frame);
@@ -438,6 +426,19 @@ public class AggregateBolt  extends BaseRichBolt{
 		this.current_frame = String.valueOf(getDate());
 		this.redis = new Jedis(HOST,PORT);
 		this.subway = new HashMap<String,ArrayList<String>>();
+		try {
+			getLines();
+			getStations();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//this.stopwatch_month = Stopwatch.createStarted();
 	}
 
